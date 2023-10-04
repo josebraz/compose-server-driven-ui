@@ -1,5 +1,6 @@
 package com.josebraz.serverdrivenui.core.components
 
+import androidx.compose.runtime.Immutable
 import com.josebraz.serverdrivenui.core.action.Action
 import com.josebraz.serverdrivenui.core.model.Color
 import com.josebraz.serverdrivenui.core.model.Size
@@ -10,6 +11,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("View.Button")
+@Immutable
 data class ButtonView(
     val action: Action = Action.None,
     override val modifier: Modifier = Modifier,

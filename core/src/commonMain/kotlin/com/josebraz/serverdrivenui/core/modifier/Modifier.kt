@@ -1,5 +1,6 @@
 package com.josebraz.serverdrivenui.core.modifier
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -13,6 +14,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 
 @Serializable(with = ModifierSerializer::class)
+@Immutable
 interface Modifier {
 
     fun <R> fold(initial: R, operation: (R, Element) -> R): R

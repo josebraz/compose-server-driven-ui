@@ -1,6 +1,8 @@
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -9,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
@@ -37,13 +40,19 @@ import com.josebraz.serverdrivenui.core.components.TextFieldView
 import com.josebraz.serverdrivenui.core.components.TextView
 import com.josebraz.serverdrivenui.core.components.TopBar
 import com.josebraz.serverdrivenui.core.components.TopBarComponent
+import com.josebraz.serverdrivenui.core.model.Alignment
 import com.josebraz.serverdrivenui.core.model.AnyValue
+import com.josebraz.serverdrivenui.core.model.HorizontalAlignment
 import com.josebraz.serverdrivenui.core.model.dp
 import com.josebraz.serverdrivenui.core.model.toAnyValues
 import com.josebraz.serverdrivenui.core.model.toOperand
+import com.josebraz.serverdrivenui.core.modifier.fillMaxWidth
+import com.josebraz.serverdrivenui.core.modifier.padding
 import com.josebraz.serverdrivenui.core.modifier.size
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import test.doTest
+import com.josebraz.serverdrivenui.core.modifier.Modifier as ServerDrivenModifier
 
 val JsonScreen = run {
     StateHolder(
@@ -59,19 +68,32 @@ val JsonScreen = run {
                 }
             }
         ) {
-            Column {
+            Column(
+                modifier = ServerDrivenModifier.fillMaxWidth(),
+                horizontalAlignment = HorizontalAlignment.CenterHorizontally
+            ) {
                 Text(text = "Login")
                 TextField(
                     text = "\$login_value",
                     onChange = "login_value = arg0"
                 )
-                Box(modifier = com.josebraz.serverdrivenui.core.modifier.Modifier.size(height = 20.dp))
+                Box(modifier = ServerDrivenModifier.size(height = 20.dp))
                 Text(text = "Password")
                 TextField(
                     text = "\$password_value",
                     onChange = "password_value = arg0"
                 )
-                Box(modifier = com.josebraz.serverdrivenui.core.modifier.Modifier.size(height = 20.dp))
+                Box(modifier = ServerDrivenModifier.size(height = 20.dp))
+                Box(
+                    modifier = ServerDrivenModifier
+                        .fillMaxWidth()
+                        .padding(right = 16.dp)
+                ) {
+                    Text(
+                        text = "Remember me?",
+                        modifier = ServerDrivenModifier.align(Alignment.BottomEnd)
+                    )
+                }
                 Button(
                     action = Action.Request.Post(
                         path = "/login",
@@ -97,6 +119,8 @@ val JsonScreen = run {
     }
 }
 
+typealias AnyScope = Any
+
 @Composable
 fun App() {
     MaterialTheme {
@@ -108,7 +132,7 @@ fun App() {
 }
 
 @Composable
-fun ComponentComposable(
+fun AnyScope.ComponentComposable(
     component: Component,
     state: MutableMap<String, AnyValue>
 ) {
@@ -145,7 +169,7 @@ fun StateHolderComposable(
 }
 
 @Composable
-fun ScaffoldComposable(
+fun AnyScope.ScaffoldComposable(
     scaffold: ScaffoldLayout,
     state: MutableMap<String, AnyValue>
 ) {
@@ -165,7 +189,7 @@ fun ScaffoldComposable(
 }
 
 @Composable
-fun TopBarComposable(
+fun AnyScope.TopBarComposable(
     topBarComponent: TopBarComponent,
     state: MutableMap<String, AnyValue>
 ) {
@@ -180,11 +204,15 @@ fun TopBarComposable(
 }
 
 @Composable
-fun RowComposable(
+fun AnyScope.RowComposable(
     component: RowLayout,
     state: MutableMap<String, AnyValue>
 ) {
-    Row(component.modifier.toCompose()) {
+    Row(
+        modifier = component.modifier.toCompose(),
+        horizontalArrangement = component.horizontalArrangement.toCompose(),
+        verticalAlignment = component.verticalAlignment.toCompose()
+    ) {
         component.children.forEach {
             ComponentComposable(it, state)
         }
@@ -193,11 +221,15 @@ fun RowComposable(
 
 
 @Composable
-fun ColumnComposable(
+fun AnyScope.ColumnComposable(
     component: ColumnLayout,
     state: MutableMap<String, AnyValue>
 ) {
-    Column(component.modifier.toCompose()) {
+    Column(
+        modifier = component.modifier.toCompose(),
+        verticalArrangement = component.verticalArrangement.toCompose(),
+        horizontalAlignment = component.horizontalAlignment.toCompose()
+    ) {
         component.children.forEach {
             ComponentComposable(it, state)
         }
@@ -205,11 +237,14 @@ fun ColumnComposable(
 }
 
 @Composable
-fun BoxComposable(
+fun AnyScope.BoxComposable(
     component: BoxLayout,
     state: MutableMap<String, AnyValue>
 ) {
-    Box(component.modifier.toCompose()) {
+    Box(
+        modifier = component.modifier.toCompose(),
+        contentAlignment = component.contentAlignment.toCompose()
+    ) {
         component.children.forEach {
             ComponentComposable(it, state)
         }
@@ -217,7 +252,7 @@ fun BoxComposable(
 }
 
 @Composable
-fun ButtonComposable(
+fun AnyScope.ButtonComposable(
     component: ButtonView,
     state: MutableMap<String, AnyValue>
 ) {
@@ -233,7 +268,7 @@ fun ButtonComposable(
 }
 
 @Composable
-fun TextFieldComposable(
+fun AnyScope.TextFieldComposable(
     component: TextFieldView,
     state: MutableMap<String, AnyValue>
 ) {
@@ -249,14 +284,14 @@ fun TextFieldComposable(
 }
 
 @Composable
-fun TextComposable(
+fun AnyScope.TextComposable(
     component: TextView,
     state: MutableMap<String, AnyValue>
 ) {
     val executorText = Executor('\"' + component.text + '\"', state)
     Text(
         text = executorText.execute().toString(),
-        modifier = component.modifier.toCompose()
+        modifier = component.modifier.toCompose(this)
     )
 }
 

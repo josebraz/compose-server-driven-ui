@@ -1,10 +1,12 @@
 package com.josebraz.serverdrivenui.core.model
 
+import androidx.compose.runtime.Immutable
 import com.josebraz.serverdrivenui.core.action.Operand
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Immutable
 sealed interface AnyValue {
     override fun toString(): String
     fun toInt(): Int
@@ -39,6 +41,7 @@ fun <K> Map<K, Any>.toAnyValues(): Map<K, AnyValue> = this.mapValues {
 
 @Serializable
 @SerialName("UnknownValue")
+@Immutable
 data object UnknownValue: AnyValue {
     override fun toInt(): Int = 0
     override fun toFloat(): Float = 0F
@@ -48,6 +51,7 @@ data object UnknownValue: AnyValue {
 
 @Serializable
 @SerialName("String")
+@Immutable
 data class StringValue(
     val string: String
 ): AnyValue {
@@ -72,6 +76,7 @@ fun Double.toOperand(): Operand = this.toNumberValue().toOperand()
 
 @Serializable
 @SerialName("Number")
+@Immutable
 sealed interface NumberValue: AnyValue {
     operator fun plus(other: NumberValue): NumberValue
     operator fun minus(other: NumberValue): NumberValue
@@ -82,6 +87,7 @@ sealed interface NumberValue: AnyValue {
     override fun toOperand(): Operand = Operand.NumberOperand(this)
 
     @SerialName("Number.Int")
+    @Immutable
     data class IntValue(val int: Int): NumberValue {
         override fun plus(other: NumberValue): NumberValue {
             return when (other) {
@@ -125,6 +131,7 @@ sealed interface NumberValue: AnyValue {
     }
 
     @SerialName("Number.Float")
+    @Immutable
     data class FloatValue(val float: Float): NumberValue {
         override fun plus(other: NumberValue): NumberValue {
             return when (other) {

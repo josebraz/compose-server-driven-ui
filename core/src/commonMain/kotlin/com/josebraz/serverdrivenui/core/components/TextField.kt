@@ -1,5 +1,6 @@
 package com.josebraz.serverdrivenui.core.components
 
+import androidx.compose.runtime.Immutable
 import com.josebraz.serverdrivenui.core.action.Action
 import com.josebraz.serverdrivenui.core.modifier.Modifier
 import kotlinx.serialization.SerialName
@@ -8,6 +9,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("View.TextField")
+@Immutable
 data class TextFieldView(
     val text: String,
     val onChange: String,

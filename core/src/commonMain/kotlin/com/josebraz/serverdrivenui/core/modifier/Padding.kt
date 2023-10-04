@@ -1,11 +1,13 @@
 package com.josebraz.serverdrivenui.core.modifier
 
+import androidx.compose.runtime.Immutable
 import com.josebraz.serverdrivenui.core.model.Size
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("Modifier.Padding")
+@Immutable
 data class Padding(
     val left: Size = Size.Undefined,
     val top: Size = Size.Undefined,

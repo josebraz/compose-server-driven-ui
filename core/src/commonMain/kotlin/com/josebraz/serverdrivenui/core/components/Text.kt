@@ -1,5 +1,6 @@
 package com.josebraz.serverdrivenui.core.components
 
+import androidx.compose.runtime.Immutable
 import com.josebraz.serverdrivenui.core.model.Color
 import com.josebraz.serverdrivenui.core.model.Size
 import com.josebraz.serverdrivenui.core.modifier.Modifier
@@ -9,6 +10,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("View.Text")
+@Immutable
 data class TextView(
     val text: String,
     override val modifier: Modifier = Modifier,

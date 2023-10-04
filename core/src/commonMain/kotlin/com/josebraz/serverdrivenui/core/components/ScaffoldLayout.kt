@@ -1,11 +1,13 @@
 package com.josebraz.serverdrivenui.core.components
 
+import androidx.compose.runtime.Immutable
 import com.josebraz.serverdrivenui.core.modifier.Modifier
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("Scaffold")
+@Immutable
 data class ScaffoldLayout(
     val topbar: TopBarComponent = TopBarComponent(),
     override val modifier: Modifier = Modifier,

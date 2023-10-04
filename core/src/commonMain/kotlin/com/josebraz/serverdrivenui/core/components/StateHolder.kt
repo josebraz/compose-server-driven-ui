@@ -1,5 +1,6 @@
 package com.josebraz.serverdrivenui.core.components
 
+import androidx.compose.runtime.Immutable
 import com.josebraz.serverdrivenui.core.model.AnyValue
 import com.josebraz.serverdrivenui.core.modifier.Modifier
 import kotlinx.serialization.SerialName
@@ -7,6 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("StateHolder")
+@Immutable
 data class StateHolder(
     val states: Map<String, AnyValue> = emptyMap(),
     override val modifier: Modifier = Modifier,

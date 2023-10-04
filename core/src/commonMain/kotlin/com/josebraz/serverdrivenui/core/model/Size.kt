@@ -1,5 +1,6 @@
 package com.josebraz.serverdrivenui.core.model
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,6 +12,7 @@ import kotlinx.serialization.encoding.Encoder
 
 @Serializable(with = SizeAsStringSerializer::class)
 @SerialName("Size")
+@Immutable
 data class Size internal constructor(
     val value: Int,
     val type: String
